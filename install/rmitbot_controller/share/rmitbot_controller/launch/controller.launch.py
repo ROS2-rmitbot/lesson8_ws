@@ -24,6 +24,14 @@ def generate_launch_description():
     
     robot_description = ParameterValue(Command(['xacro ', urdf_path]), value_type=str)
     
+    # Publish the robot static TF from the urdf
+    robot_state_publisher = Node(
+        package=    "robot_state_publisher",
+        executable= "robot_state_publisher",
+        parameters=[{"use_sim_time": False, 
+                     "robot_description": robot_description}],
+        )
+    
     # controller manager node
     controller_manager = Node(
         package="controller_manager",
@@ -79,6 +87,7 @@ def generate_launch_description():
 
     return LaunchDescription(
         [
+            robot_state_publisher, 
             controller_manager, 
             joint_state_broadcaster_spawner,
             controller_spawner_delayed,

@@ -12,22 +12,16 @@ from launch.substitutions import Command, LaunchConfiguration
 def generate_launch_description():
     
   
-    # Path to the package
+    # Path to the package dsecription
     pkg_path = get_package_share_directory("rmitbot_description")
-    
-    # Path to the urdf file
     urdf_path = os.path.join(pkg_path, 'urdf', 'rmitbot.urdf.xacro')
-    
-    # Path to the rviz config file
-    rviz_path = os.path.join(pkg_path, 'rviz', 'display.rviz')
-    
     # Compile the xacro file to urdf
     robot_description = ParameterValue(Command(['xacro ', urdf_path]), value_type=str)
     
     # Publish the robot static TF from the urdf
     robot_state_publisher = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
+        package=    "robot_state_publisher",
+        executable= "robot_state_publisher",
         parameters=[{"use_sim_time": False, 
                      "robot_description": robot_description}],
         )
@@ -37,6 +31,9 @@ def generate_launch_description():
         package='joint_state_publisher_gui',
         executable='joint_state_publisher_gui',
     )
+    
+    # Path to the rviz config file
+    rviz_path = os.path.join(pkg_path, 'rviz', 'display.rviz')
     
     # This node launches RViz2 with the specified configuration file
     rviz = Node(
@@ -49,7 +46,7 @@ def generate_launch_description():
     )
     
     return LaunchDescription([
-        robot_state_publisher, 
+        # robot_state_publisher, 
         # joint_state_publisher_gui,
         rviz, 
     ])
