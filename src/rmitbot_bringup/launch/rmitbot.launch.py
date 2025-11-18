@@ -9,43 +9,37 @@ from launch.event_handlers import OnProcessExit
 
 def generate_launch_description():
     
+    # Path to the package 
+    pkg_path_description =  get_package_share_directory("rmitbot_description")
+    pkg_path_controller =   get_package_share_directory("rmitbot_controller")
+    pkg_path_localization =   get_package_share_directory("rmitbot_localization")
+
+    
     # Launch rviz
     display = IncludeLaunchDescription(
-        os.path.join(
-            get_package_share_directory("rmitbot_description"),
-            "launch", "display.launch.py"
-        ),
-    )
-    
-    
-    # Launch the controller manager spawner
+        os.path.join(pkg_path_description,"launch","display.launch.py"),
+    )  
+
+    # Launch the controller manager
     controller = IncludeLaunchDescription(
-        os.path.join(
-            get_package_share_directory("rmitbot_controller"),
-            "launch", "controller.launch.py"
-        ),
+        os.path.join(pkg_path_controller,"launch","controller.launch.py"),
     )
     
     
     # Launch the teleop keyboard node
     teleopkeyboard = IncludeLaunchDescription(
-        os.path.join(
-            get_package_share_directory("rmitbot_controller"),
-            "launch", "teleopkeyboard.launch.py"
-        ),
+        os.path.join(pkg_path_controller,"launch", "teleopkeyboard.launch.py"),
         launch_arguments={
             "use_sim_time": "False"
         }.items()
     )
     
     localization = IncludeLaunchDescription(
-        os.path.join(
-            get_package_share_directory("rmitbot_localization"),
-            "launch",
-            "localization.launch.py"
-        ),
+        os.path.join(pkg_path_localization,"launch","localization.launch.py"),
     )
     
+    # PC:   display, keyboard
+    # RPI:  controller, localization
     return LaunchDescription([
         display,
         # controller,
